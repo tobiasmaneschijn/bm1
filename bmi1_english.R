@@ -6,7 +6,6 @@
 ## "Session -> Set Working Directory -> To Source File Location" 
 ## Note: In R only "/" is used for separating in paths 
 ## (i.e. no backslash).
-setwd("~/Documents/DTU/Stats/bm1")
 
 
 ###########################################################################
