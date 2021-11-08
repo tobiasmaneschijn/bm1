@@ -31,6 +31,7 @@ summary(D)
 ## Another type of summary of the dataset
 str(D)
 
+is.na(D)
 
 ###########################################################################
 ## Calculate BMI scores
@@ -74,15 +75,51 @@ boxplot(Dfemale$bmi, Dmale$bmi, names=c("Female", "Male"),
 
 ###########################################################################
 ## Summary statistics for BMI
+plot.ecdf(Dfemale$bmi)
+plot.ecdf(Dmale$bmi)
 
+
+## Both Genders combined
 ## Total number of observations
 ## (doesn't include missing values if there are any)
 sum(!is.na(D$bmi))
+
 ## Sample mean (both genders combined)
 mean(D$bmi, na.rm=TRUE)
 ## Sample variance (both genders combined)
 var(D$bmi, na.rm=TRUE)
 ## etc.
+sd(D$bmi, na.rm=TRUE)
+
+## Only Females
+
+## Total number of observations
+sum(!is.na(Dfemale$bmi))
+
+## Sample mean (female)
+mean(Dfemale$bmi, na.rm=TRUE)
+## Sample variance (female)
+var(Dfemale$bmi, na.rm=TRUE)
+## etc.
+sd(Dfemale$bmi, na.rm=TRUE)
+
+## Only Males
+
+## Total number of observations
+sum(!is.na(Dmale$bmi))
+
+## Sample mean (female)
+mean(Dmale$bmi, na.rm=TRUE)
+## Sample variance (female)
+var(Dmale$bmi, na.rm=TRUE)
+## etc.
+sd(Dmale$bmi, na.rm=TRUE)
+
+## Summary stats for all
+
+summary(D$bmi, na.rm=TRUE)
+summary(Dfemale$bmi, na.rm=TRUE)
+summary(Dmale$bmi, na.rm=TRUE)
 ##
 ## The argument 'na.rm=TRUE' ensures that the statistic is
 ## computed even in cases where there are missing values.
@@ -98,15 +135,54 @@ qqnorm(D$logbmi)
 qqline(D$logbmi)
 
 
+
+Dfemale$logbmi <- log(Dfemale$bmi)
+Dmale$logbmi <- log(Dmale$bmi)
+## qq-plot of log-transformed BMI
+qqnorm(Dfemale$logbmi)
+qqline(Dfemale$logbmi)
+
+qqnorm(Dmale$logbmi)
+qqline(Dmale$logbmi)
+
+3.217641 - 1.976575 * ((0.1488778) / (sqrt(145)))
+3.217641 + 1.976575 * ((0.1488778) / (sqrt(145)))
+
+qt(p=0.975, df=144)
+
+qt(p=0.975, df=144)
+
+mean(D$logbmi) + qt(p=0.975, df=144) * ((sd(D$logbmi))/(sqrt(145)))
+mean(D$logbmi) - qt(p=0.975, df=144) * ((sd(D$logbmi))/(sqrt(145)))
 ###########################################################################
 ## One-sample t-test
+
+n <- length(D$logbmi)
+n
+sd(D$logbmi)
+mean(D$logbmi) 
+t_obs <- (mean(D$logbmi) - log(25)) / (sd(D$logbmi) / sqrt(n))
+t_obs
+
+
+pvalue <- 2 * (1-pt(abs(t_obs), df=n-1))
+pvalue
 
 ## Testing hypothesis mu=log(25) for log-transformed BMI
 t.test(D$logbmi, mu=log(25))
 
 
+
 ###########################################################################
 ## CI's for the mean and median
+
+
+
+## Compute CI for mean log-BMI score
+KI <- t.test(D$logbmi, conf.level=0.95)$conf.int
+KI
+## "Back-transform" to get a CI for median BMI score
+exp(KI)
 
 ## Consider data for women only
 Dfemale <- subset(D, gender == 0)
